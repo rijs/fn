@@ -1,5 +1,5 @@
 var expect = require('chai').expect
-  , core = require('core')
+  , core = require('rijs.core')
   , fn = require('./')
 
 describe('Function Type', function() {
