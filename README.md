@@ -1,4 +1,4 @@
-# Ripple | fn
+# Ripple | Function
 [![Coverage Status](https://coveralls.io/repos/rijs/fn/badge.svg?branch=master&service=github)](https://coveralls.io/github/rijs/fn?branch=master)
 [![Build Status](https://travis-ci.org/rijs/fn.svg)](https://travis-ci.org/rijs/fn)
 
