@@ -1,7 +1,7 @@
 // -------------------------------------------
 // Exposes a convenient global instance 
 // -------------------------------------------
-export default function fn(ripple){
+export default function fnc(ripple){
   log('creating')
   ripple.types['application/javascript'] = {
     header: 'application/javascript'
@@ -13,7 +13,6 @@ export default function fn(ripple){
 }
 
 import includes from 'utilise/includes'
-import log from 'utilise/log'
 import is from 'utilise/is'
 import fn from 'utilise/fn'
-log = log('[ri/types/fn]')
+var log = require('utilise/log')('[ri/types/fn]')
