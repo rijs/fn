@@ -1,18 +1,19 @@
 // -------------------------------------------
-// Exposes a convenient global instance 
+// Adds support for function resources
 // -------------------------------------------
 export default function fnc(ripple){
   log('creating')
-  ripple.types['application/javascript'] = {
-    header: 'application/javascript'
-  , check(res){ return is.fn(res.body) }
-  , parse(res){ return res.body = fn(res.body), res }
-  }
-
+  ripple.types['application/javascript'] = { header, check, parse }
   return ripple
 }
 
-import includes from 'utilise/includes'
+const header = 'application/javascript'
+
+const check = res => is.fn(res.body)
+
+const parse = res => (res.body = fn(res.body), res)
+
+const log = require('utilise/log')('[ri/types/fn]')
+
 import is from 'utilise/is'
 import fn from 'utilise/fn'
-var log = require('utilise/log')('[ri/types/fn]')

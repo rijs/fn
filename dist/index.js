@@ -5,10 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = fnc;
 
-var _includes = require('utilise/includes');
-
-var _includes2 = _interopRequireDefault(_includes);
-
 var _is = require('utilise/is');
 
 var _is2 = _interopRequireDefault(_is);
@@ -21,21 +17,22 @@ var _fn2 = _interopRequireDefault(_fn);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // -------------------------------------------
-// Exposes a convenient global instance
+// Adds support for function resources
 // -------------------------------------------
 function fnc(ripple) {
   log('creating');
-  ripple.types['application/javascript'] = {
-    header: 'application/javascript',
-    check: function check(res) {
-      return _is2.default.fn(res.body);
-    },
-    parse: function parse(res) {
-      return res.body = (0, _fn2.default)(res.body), res;
-    }
-  };
-
+  ripple.types['application/javascript'] = { header: header, check: check, parse: parse };
   return ripple;
 }
+
+var header = 'application/javascript';
+
+var check = function check(res) {
+  return _is2.default.fn(res.body);
+};
+
+var parse = function parse(res) {
+  return res.body = (0, _fn2.default)(res.body), res;
+};
 
 var log = require('utilise/log')('[ri/types/fn]');
