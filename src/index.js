@@ -3,17 +3,16 @@
 // -------------------------------------------
 export default function fnc(ripple){
   log('creating')
-  ripple.types['application/javascript'] = { header, check, parse }
+  ripple.types['application/javascript'] = { header, check, parse, to }
   return ripple
 }
 
 const header = 'application/javascript'
-
 const check = res => is.fn(res.body)
-
 const parse = res => (res.body = fn(res.body), res)
+const log   = require('utilise/log')('[ri/types/fn]')
+const to    = res => (res.body = str(res.body), res)
 
-const log = require('utilise/log')('[ri/types/fn]')
-
+import str from 'utilise/str'
 import is from 'utilise/is'
 import fn from 'utilise/fn'

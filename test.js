@@ -1,5 +1,6 @@
 var expect = require('chai').expect
   , core = require('rijs.core').default
+  , noop = require('utilise/noop')
   , fn = require('./').default
 
 describe('Function Type', function() {
@@ -14,6 +15,11 @@ describe('Function Type', function() {
     var ripple = fn(core())
     ripple('baz', [])
     expect(ripple.resources['baz']).to.not.be.ok
+  })
+
+  it('should stringify outoging functions', function(){  
+    var ripple = fn(core())
+    expect(ripple.types['application/javascript'].to({ body: noop })).to.be.eql({ body: 'function noop(){}' })
   })
 
 })
