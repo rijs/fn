@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/rijs/fn/badge.svg?branch=master&service=github)](https://coveralls.io/github/rijs/fn?branch=master)
 [![Build Status](https://travis-ci.org/rijs/fn.svg)](https://travis-ci.org/rijs/fn)
 
-Allows registering function resources.
+Extends [core](https://github.com/rijs/core#ripple--core) to register functions. For cases when a function resource is registered as a string (e.g. from WS, localStorage), this converts it into a real function before storing.
 
 ```js
 ripple('component', function(){ })
