@@ -38,5 +38,5 @@ var parse = function parse(res) {
 };
 var log = require('utilise/log')('[ri/types/fn]');
 var to = function to(res) {
-  return res.body = (0, _str2.default)(res.body), res;
+  return res.value = (0, _str2.default)(res.value), res;
 };

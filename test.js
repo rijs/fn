@@ -19,7 +19,7 @@ describe('Function Type', function() {
 
   it('should stringify outoging functions', function(){  
     var ripple = fn(core())
-    expect(ripple.types['application/javascript'].to({ body: noop })).to.be.eql({ body: 'function noop(){}' })
+    expect(ripple.types['application/javascript'].to({ value: noop })).to.be.eql({ value: 'function noop(){}' })
   })
 
 })

@@ -11,7 +11,7 @@ const header = 'application/javascript'
 const check = res => is.fn(res.body)
 const parse = res => (res.body = fn(res.body), res)
 const log   = require('utilise/log')('[ri/types/fn]')
-const to    = res => (res.body = str(res.body), res)
+const to    = res => (res.value = str(res.value), res)
 
 import str from 'utilise/str'
 import is from 'utilise/is'
