@@ -1,6 +1,16 @@
 var fn = (function () {
 'use strict';
 
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+
+
+
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
 var is_1 = is;
 is.fn      = isFunction;
 is.str     = isString;
@@ -107,13 +117,11 @@ function toObject(d) {
   }
 }
 
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
 var client = typeof window != 'undefined';
 
 var owner = client ? /* istanbul ignore next */ window : commonjsGlobal;
 
-var log$1 = function log(ns){
+var log = function log(ns){
   return function(d){
     if (!owner.console || !console.log.apply) { return d; }
     is_1.arr(arguments[2]) && (arguments[2] = arguments[2].length);
@@ -143,6 +151,44 @@ var attr = function attr(name, value) {
           } 
 };
 
+var wrap = function wrap(d){
+  return function(){
+    return d
+  }
+};
+
+var str = function str(d){
+  return d === 0 ? '0'
+       : !d ? ''
+       : is_1.fn(d) ? '' + d
+       : is_1.obj(d) ? JSON.stringify(d)
+       : String(d)
+};
+
+var key = function key(k, v){ 
+  var set = arguments.length > 1
+    , keys = is_1.fn(k) ? [] : str(k).split('.')
+    , root = keys.shift();
+
+  return function deep(o, i){
+    var masked = {};
+    
+    return !o ? undefined 
+         : !is_1.num(k) && !k ? o
+         : is_1.arr(k) ? (k.map(copy), masked)
+         : o[k] || !keys.length ? (set ? ((o[k] = is_1.fn(v) ? v(o[k], i) : v), o)
+                                       :  (is_1.fn(k) ? k(o) : o[k]))
+                                : (set ? (key(keys.join('.'), v)(o[root] ? o[root] : (o[root] = {})), o)
+                                       :  key(keys.join('.'))(o[root]))
+
+    function copy(k){
+      var val = key(k)(o);
+      if (val != undefined) 
+        { key(k, is_1.fn(val) ? wrap(val) : val)(masked); }
+    }
+  }
+};
+
 var lo = function lo(d){
   return (d || '').toLowerCase()
 };
@@ -152,11 +198,12 @@ var fn = function fn(candid){
        : (new Function("return " + candid))()
 };
 
+var fn_1 = createCommonjsModule(function (module) {
 // -------------------------------------------
 // Adds support for function resources
 // -------------------------------------------
-var fn_1 = function fnc(ripple){
-  log('creating');
+module.exports = function fnc(ripple){
+  log$$1('creating');
   ripple.types['application/javascript'] = { 
     selector: selector
   , extract: extract
@@ -167,12 +214,17 @@ var fn_1 = function fnc(ripple){
   return ripple
 };
 
-var selector = function (res) { return ((res.name) + ",[is~=\"" + (res.name) + "\"]"); };
-var extract = function (el) { return (attr('is')(el) || '').split(' ').concat(lo(el.nodeName)); };
-var header = 'application/javascript';
-var check = function (res) { return is_1.fn(res.body); };
-var parse = function (res) { return (res.body = fn(res.body), res); };
-var log   = log$1('[ri/types/fn]');
+var selector = function (res) { return ((res.name) + ",[is~=\"" + (res.name) + "\"]"); }
+    , extract = function (el) { return (attr('is')(el) || '').split(' ').concat(lo(el.nodeName)); }
+    , header = 'application/javascript'
+    , check = function (res) { return is_1.fn(res.body); }
+    , log$$1   = log('[ri/types/fn]')
+    , parse = function (res) { 
+        res.body = fn(res.body);
+        key('headers.transpile.limit', 25)(res);
+        return res
+      };
+});
 
 return fn_1;
 
