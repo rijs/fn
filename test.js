@@ -9,6 +9,10 @@ describe('Function Type', function() {
     var ripple = fn(core())
     ripple('foo', String)
     expect(ripple('foo')).to.eql(String)
+    expect(ripple.resources.foo.headers).to.be.eql({ 
+      'content-type': 'application/javascript'
+    , 'transpile': { limit: 25 }
+    })
   })
 
   it('should not create fn resource', function(){  
