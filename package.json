@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "index",
   "author": "Pedram Emrouznejad (https://github.com/pemrouz)",
+  "browser": {
+    "utilise/file": false
+  , "browser-resolve": false
+  , "path": false
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/rijs/fn.git"

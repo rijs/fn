@@ -1,32 +1,78 @@
 // -------------------------------------------
 // Adds support for function resources
 // -------------------------------------------
-module.exports = function fnc(ripple){
+module.exports = function fnc(ripple, { dir = '.' } = {}){
   log('creating')
-  ripple.types['application/javascript'] = { 
-    selector
-  , extract
-  , header
-  , check
-  , parse
+
+  // TODO: re-add client-side resolve too?
+  ripple.require = res => module => {
+    if (module in res.headers.dependencies && ripple.resources[res.headers.dependencies[module]])
+      return ripple(res.headers.dependencies[module])
+    else
+      throw new Error(`Cannot find module: ${module} for ${res.name}`)
   }
+
+  ripple.types['application/javascript'] = { 
+    selector: res => `${res.name},[is~="${res.name}"]`
+  , extract: el => (attr('is')(el) || '').split(' ').concat(lo(el.nodeName))
+  , header: 'application/javascript'
+  , ext: '*.js'
+  , shortname: path => basename(path).split('.').shift()
+  , check: res => is.fn(res.body)
+  , load(res) {
+      if (res.headers.path.endsWith('.res.js')) {
+        let exported = require(res.headers.path)
+        exported = exported.default || exported
+        res.headers['content-type'] = this.header
+        ripple(merge(res)(exported))
+        return ripple.resources[res.name]
+      } else {
+        // TODO: try catch this, emit fail
+        res.body = new Function('module', 'exports', 'require', 'process', file(res.headers.path))
+        res.headers['content-type'] = this.header
+        res.headers.format = 'cjs'
+        ripple(res)
+        return ripple.resources[res.name]
+      }
+    }
+  , parse: res => { 
+      // TODO: separate entrypoint?
+      if (client) {
+        // TODO: branch on headers.format
+        const m = { exports: {} };
+        res.body(m, m.exports, ripple.require(res), { env: {}}) 
+        res.body = m.exports
+      } else {
+        // TODO: use deep defaults hers
+        res.headers.transpile = res.headers.transpile || { limit: 25 }
+        // TODO: branch on headers.format
+        // TODO: here or on load?
+        res.headers.dependencies = (`${res.body}`.match(/require\(.*?\)/g) || [])
+          .reduce((deps, match) => { 
+            const specifier = match.slice(9, -2)
+                , resolved  = bresolve(specifier, res.headers.path)
+            deps[specifier] = './' + relative(dir, resolved).replace(/\\/g, '/')
+            return deps
+          }, {})
+      }
+
+      return res
+    }
+  }
+
   return ripple
 }
 
-const selector = res => `${res.name},[is~="${res.name}"]`
-    , extract = el => (attr('is')(el) || '').split(' ').concat(lo(el.nodeName))
-    , header = 'application/javascript'
-    , check = res => is.fn(res.body)
-    , log   = require('utilise/log')('[ri/types/fn]')
-    , parse = res => { 
-        res.body = fn(res.body)
-        key('headers.transpile.limit', 25)(res)
-        return res
-      }
-  
-const attr = require('utilise/attr')
+const bresolve = (module, parent) => require('browser-resolve')
+  .sync(module, { filename: parent })
+
+const { relative, basename } = require('path')
+    , log = require('utilise/log')('[ri/types/fn]')
+    , client = require('utilise/client')
+    , merge = require('utilise/merge')
+    , file = require('utilise/file')
+    , attr = require('utilise/attr')
     , key = require('utilise/key')
-    , str = require('utilise/str')
     , is = require('utilise/is')
     , lo = require('utilise/lo')
     , fn = require('utilise/fn')
