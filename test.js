@@ -11,6 +11,7 @@ describe('Function Type', function() {
     expect(ripple('foo')).to.eql(String)
     expect(ripple.resources.foo.headers).to.be.eql({ 
       'content-type': 'application/javascript'
+    , 'dependencies': {}
     , 'transpile': { limit: 25 }
     })
   })

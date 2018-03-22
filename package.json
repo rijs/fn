@@ -4,9 +4,9 @@
   "main": "index",
   "author": "Pedram Emrouznejad (https://github.com/pemrouz)",
   "browser": {
-    "utilise/file": false
-  , "browser-resolve": false
-  , "path": false
+    "utilise/file": false,
+    "browser-resolve": false,
+    "path": false
   },
   "repository": {
     "type": "git",
