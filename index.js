@@ -13,28 +13,28 @@ module.exports = function fnc(ripple, { dir = '.' } = {}){
   }
 
   ripple.types['application/javascript'] = { 
-    selector: res => `${res.name},[is~="${res.name}"]`
+    header
+  , selector: res => `${res.name},[is~="${res.name}"]`
   , extract: el => (attr('is')(el) || '').split(' ').concat(lo(el.nodeName))
-  , header: 'application/javascript'
   , ext: '*.js'
   , shortname: path => basename(path).split('.').shift()
   , check: res => is.fn(res.body)
-  , load(res) {
+  , load: !client && (res => {
       if (res.headers.path.endsWith('.res.js')) {
         let exported = require(res.headers.path)
         exported = exported.default || exported
-        res.headers['content-type'] = this.header
+        res.headers['content-type'] = header
         ripple(merge(res)(exported))
         return ripple.resources[res.name]
       } else {
         // TODO: try catch this, emit fail
         res.body = new Function('module', 'exports', 'require', 'process', file(res.headers.path))
-        res.headers['content-type'] = this.header
+        res.headers['content-type'] = header
         res.headers.format = 'cjs'
         ripple(res)
         return ripple.resources[res.name]
       }
-    }
+    })
   , parse: res => { 
       // TODO: separate entrypoint?
       if (client) {
@@ -63,16 +63,21 @@ module.exports = function fnc(ripple, { dir = '.' } = {}){
   return ripple
 }
 
-const bresolve = (module, parent) => require('browser-resolve')
-  .sync(module, { filename: parent })
+const bresolve = (module, parent) => 
+  resolve.sync(module, { filename: parent })
 
-const { relative, basename } = require('path')
-    , log = require('utilise/log')('[ri/types/fn]')
+const log = require('utilise/log')('[ri/types/fn]')
     , client = require('utilise/client')
     , merge = require('utilise/merge')
-    , file = require('utilise/file')
     , attr = require('utilise/attr')
     , key = require('utilise/key')
     , is = require('utilise/is')
     , lo = require('utilise/lo')
     , fn = require('utilise/fn')
+    , header = 'application/javascript'
+
+if (!client) {
+  var { relative, basename } = require('path')
+      , resolve = require('browser-resolve')
+      , file = require('utilise/file')
+}

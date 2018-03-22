@@ -3,19 +3,16 @@
   "version": "1.1.0",
   "main": "index",
   "author": "Pedram Emrouznejad (https://github.com/pemrouz)",
-  "browser": {
-    "utilise/file": false,
-    "browser-resolve": false,
-    "path": false
-  },
+  "browser": "client",
   "repository": {
     "type": "git",
     "url": "git://github.com/rijs/fn.git"
   },
   "scripts": {
-    "build": "npm run rollup && npm run minify && npm run gzip",
+    "build": "npm run client && npm run rollup && npm run minify && npm run gzip",
+    "client": "uglifyjs index.js -b -d client=true -c > client.js",
     "rollup": "rollup -c",
-    "minify": "uglifyjs client.bundle.js -m -c keep_fargs=false > client.min.js",
+    "minify": "uglifyjs client.bundle.js -m -c keep_fargs=false -b -d client=true> client.min.js",
     "gzip": "gzip -c client.min.js > client.min.js.gz",
     "test": "istanbul test ./node_modules/mocha/bin/_mocha --report html -- -R spec",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && rm -rf ./coverage",
