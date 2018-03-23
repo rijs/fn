@@ -12,7 +12,7 @@
     "build": "npm run client && npm run rollup && npm run minify && npm run gzip",
     "client": "uglifyjs index.js -b -d client=true -c > client.js",
     "rollup": "rollup -c",
-    "minify": "uglifyjs client.bundle.js -m -c keep_fargs=false -b -d client=true> client.min.js",
+    "minify": "uglifyjs client.bundle.js -m -c keep_fargs=false > client.min.js",
     "gzip": "gzip -c client.min.js > client.min.js.gz",
     "test": "istanbul test ./node_modules/mocha/bin/_mocha --report html -- -R spec",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && rm -rf ./coverage",
@@ -23,19 +23,19 @@
   "license": "pemrouz.mit-license.org",
   "devDependencies": {
     "chai": "*",
-    "popper": "*",
     "coveralls": "*",
     "istanbul": "*",
-    "mocha": "*",
+    "mocha": "^5.0.5",
     "mocha-lcov-reporter": "*",
-    "uglify-es": "*",
+    "popper": "*",
+    "rijs.core": "^1.2.2",
     "rollup": "*",
     "rollup-plugin-buble": "^0.16.0",
     "rollup-plugin-commonjs": "^8.2.1",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rijs.core": "*"
+    "uglify-es": "^3.3.10"
   },
   "dependencies": {
-    "utilise": "*"
+    "utilise": "^2.3.1"
   }
 }

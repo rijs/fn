@@ -11,7 +11,7 @@ module.exports = function(ripple, {dir: dir = "."} = {}) {
         check: res => is.fn(res.body),
         load: !1,
         parse: res => {
-            {
+            if ("cjs" == res.headers.format) {
                 const m = {
                     exports: {}
                 };

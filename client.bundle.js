@@ -163,7 +163,7 @@ var fn = (function () {
           check: function (res) { return is_1.fn(res.body); },
           load: !1,
           parse: function (res) {
-              {
+              if ("cjs" == res.headers.format) {
                   var m = {
                       exports: {}
                   };
