@@ -7,7 +7,7 @@ module.exports = function(ripple, {dir: dir = "."} = {}) {
         selector: res => `${res.name},[is~="${res.name}"]`,
         extract: el => (attr("is")(el) || "").split(" ").concat(lo(el.nodeName)),
         ext: "*.js",
-        shortname: path => basename(path).split(".").shift(),
+        shortname: path => basename(path).split(".").slice(0, -1).join("."),
         check: res => is.fn(res.body),
         load: !1,
         parse: res => {

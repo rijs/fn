@@ -159,7 +159,7 @@ var fn = (function () {
           selector: function (res) { return ((res.name) + ",[is~=\"" + (res.name) + "\"]"); },
           extract: function (el) { return (attr("is")(el) || "").split(" ").concat(lo(el.nodeName)); },
           ext: "*.js",
-          shortname: function (path) { return basename(path).split(".").shift(); },
+          shortname: function (path) { return basename(path).split(".").slice(0, -1).join("."); },
           check: function (res) { return is_1.fn(res.body); },
           load: !1,
           parse: function (res) {
