@@ -33,6 +33,7 @@ module.exports = function fnc(ripple, { dir = '.' } = {}){
         res.body = new Function('module', 'exports', 'require', 'process', file(res.headers.path))
         res.headers['content-type'] = header
         res.headers.format = 'cjs'
+        res.headers.vary = ({ name }, { platform }) => `name:${name},ua:${platform.name}-${platform.version}`// TODO: how high can this be?
         // TODO: branch on headers.format
         // TODO: here or on parse?
         res.headers.dependencies = (`${res.body}`.match(/require\(.*?\)/g) || [])
