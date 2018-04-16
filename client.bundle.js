@@ -83,6 +83,13 @@ var fn = (function () {
     }
   }
 
+  var is$1 = /*#__PURE__*/Object.freeze({
+    default: is_1,
+    __moduleExports: is_1
+  });
+
+  var is$2 = ( is$1 && is_1 ) || is$1;
+
   var to = { 
     arr: toArray
   , obj: toObject
@@ -102,22 +109,47 @@ var fn = (function () {
 
     function reduce(p,v,i){
       if (i === 0) { p = {}; }
-      p[is_1.fn(by) ? by(v, i) : v[by]] = v;
+      p[is$2.fn(by) ? by(v, i) : v[by]] = v;
       return p
     }
   }
+  var to_1 = to.arr;
+  var to_2 = to.obj;
+
+  var to$1 = /*#__PURE__*/Object.freeze({
+    default: to,
+    __moduleExports: to,
+    arr: to_1,
+    obj: to_2
+  });
 
   var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
   var client = typeof window != 'undefined';
 
-  var owner = client ? /* istanbul ignore next */ window : commonjsGlobal;
+  var client$1 = /*#__PURE__*/Object.freeze({
+    default: client,
+    __moduleExports: client
+  });
+
+  var client$2 = ( client$1 && client ) || client$1;
+
+  var owner = client$2 ? /* istanbul ignore next */ window : commonjsGlobal;
+
+  var owner$1 = /*#__PURE__*/Object.freeze({
+    default: owner,
+    __moduleExports: owner
+  });
+
+  var to$2 = ( to$1 && to ) || to$1;
+
+  var owner$2 = ( owner$1 && owner ) || owner$1;
 
   var log = function log(ns){
     return function(d){
-      if (!owner.console || !console.log.apply) { return d; }
-      is_1.arr(arguments[2]) && (arguments[2] = arguments[2].length);
-      var args = to.arr(arguments)
+      if (!owner$2.console || !console.log.apply) { return d; }
+      is$2.arr(arguments[2]) && (arguments[2] = arguments[2].length);
+      var args = to$2.arr(arguments)
         , prefix = '[log][' + (new Date()).toISOString() + ']' + ns;
 
       args.unshift(prefix.grey ? prefix.grey : prefix);
@@ -125,14 +157,19 @@ var fn = (function () {
     }
   };
 
+  var log$1 = /*#__PURE__*/Object.freeze({
+    default: log,
+    __moduleExports: log
+  });
+
   var attr = function attr(name, value) {
     var args = arguments.length;
     
-    return !is_1.str(name) && args == 2 ? attr(arguments[1]).call(this, arguments[0])
-         : !is_1.str(name) && args == 3 ? attr(arguments[1], arguments[2]).call(this, arguments[0])
+    return !is$2.str(name) && args == 2 ? attr(arguments[1]).call(this, arguments[0])
+         : !is$2.str(name) && args == 3 ? attr(arguments[1], arguments[2]).call(this, arguments[0])
          :  function(el){
               var ctx = this || {};
-              el = ctx.nodeName || is_1.fn(ctx.node) ? ctx : el;
+              el = ctx.nodeName || is$2.fn(ctx.node) ? ctx : el;
               el = el.node ? el.node() : el;
               el = el.host || el;
 
@@ -143,24 +180,40 @@ var fn = (function () {
             } 
   };
 
+  var attr$1 = /*#__PURE__*/Object.freeze({
+    default: attr,
+    __moduleExports: attr
+  });
+
   var lo = function lo(d){
     return (d || '').toLowerCase()
   };
+
+  var lo$1 = /*#__PURE__*/Object.freeze({
+    default: lo,
+    __moduleExports: lo
+  });
+
+  var require$$0 = ( log$1 && log ) || log$1;
+
+  var attr$2 = ( attr$1 && attr ) || attr$1;
+
+  var lo$2 = ( lo$1 && lo ) || lo$1;
 
   var client_1 = function(ripple, ref) {
       if ( ref === void 0 ) ref = {};
       var dir = ref.dir; if ( dir === void 0 ) dir = ".";
 
-      return log$1("creating"), ripple.require = (function (res) { return function (module) {
+      return log$2("creating"), ripple.require = (function (res) { return function (module) {
           if (module in res.headers.dependencies && ripple.resources[res.headers.dependencies[module]]) { return ripple(res.headers.dependencies[module]); }
           throw new Error(("Cannot find module: " + module + " for " + (res.name)));
       }; }), ripple.types["application/javascript"] = {
           header: header,
           selector: function (res) { return ((res.name) + ",[is~=\"" + (res.name) + "\"]"); },
-          extract: function (el) { return (attr("is")(el) || "").split(" ").concat(lo(el.nodeName)); },
+          extract: function (el) { return (attr$2("is")(el) || "").split(" ").concat(lo$2(el.nodeName)); },
           ext: "*.js",
           shortname: function (path) { return basename(path).split(".").slice(0, -1).join("."); },
-          check: function (res) { return is_1.fn(res.body); },
+          check: function (res) { return is$2.fn(res.body); },
           load: !1,
           parse: function (res) {
               if ("cjs" == res.headers.format) {
@@ -176,7 +229,7 @@ var fn = (function () {
       }, ripple;
   };
 
-  var log$1 = log("[ri/types/fn]"), header = "application/javascript";
+  var log$2 = require$$0("[ri/types/fn]"), header = "application/javascript";
 
   var basename;
 
