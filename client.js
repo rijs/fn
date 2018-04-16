@@ -28,4 +28,4 @@ const bresolve = (module, parent) => resolve.sync(module, {
     filename: parent
 }), log = require("utilise/log")("[ri/types/fn]"), client = require("utilise/client"), merge = require("utilise/merge"), attr = require("utilise/attr"), key = require("utilise/key"), is = require("utilise/is"), lo = require("utilise/lo"), fn = require("utilise/fn"), header = "application/javascript";
 
-var relative, basename, resolve, file;
+var relative, basename, resolve, file, values, keys;
