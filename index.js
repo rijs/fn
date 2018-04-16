@@ -41,8 +41,21 @@ module.exports = function fnc(ripple, { dir = '.' } = {}){
             const specifier = match.slice(9, -2)
                 , resolved  = bresolve(specifier, res.headers.path)
             deps[specifier] = './' + relative(dir, resolved).replace(/\\/g, '/')
+            ripple.load(deps[specifier])
             return deps
           }, {})
+
+        const flattened = {}
+            , undeps = values(res.headers.dependencies)
+  
+        while (dep = undeps.shift()) {
+          if (!(dep in flattened)) {
+            flattened[dep] = 1
+            undeps.push.apply(undeps, values(ripple.resources[dep].headers.dependencies))
+          }
+        }
+
+        res.headers.flattened = keys(flattened).reverse()
         ripple(res)
         return ripple.resources[res.name]
       }
@@ -58,7 +71,7 @@ module.exports = function fnc(ripple, { dir = '.' } = {}){
         }
       } else {
         // TODO: use deep defaults here
-        merge(res.headers)({ transpile: { limit: 25 }})
+        // merge(res.headers)({ transpile: { limit: 25 }})
       }
 
       return res
@@ -85,4 +98,5 @@ if (!client) {
   var { relative, basename } = require('path')
       , resolve = require('browser-resolve')
       , file = require('utilise/file')
+      , { values, keys } = Object
 }
